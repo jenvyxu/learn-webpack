@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsWebpackPlugin= require('optimize-css-assets-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").default
 
 module.exports = {
   entry: {
@@ -67,7 +68,7 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: '[name]_[hash:8].css'
+      filename: '[name]_[contenthash:8].css'
     }),
     new OptimizeCssAssetsWebpackPlugin({
       assetNameRegExp: /\.css$/g,
@@ -102,6 +103,12 @@ module.exports = {
         removeComments: false
       }
     }),
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin(),
+    new HTMLInlineCSSWebpackPlugin({
+      filter(fileName) {
+        return fileName.includes('search');
+      }
+    }
+    )
   ]
 }
