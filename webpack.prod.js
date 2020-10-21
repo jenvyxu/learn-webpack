@@ -4,6 +4,7 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsWebpackPlugin= require('optimize-css-assets-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
   entry: {
@@ -92,6 +93,7 @@ module.exports = {
         minifyJS: true,
         removeComments: false
       }
-    })
+    }),
+    new CleanWebpackPlugin()
   ]
 }
