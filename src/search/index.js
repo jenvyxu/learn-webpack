@@ -5,17 +5,28 @@ import ReactDOM from 'react-dom'
 import logo from './image/logo.png'
 import './search.less'
 import '../../common/common'
-import { a, b } from './tree-shaking'
-
-if(false) {
-  a()
-}
 
 class Search extends React.Component {
+  constructor() {
+    super(...arguments)
+    this.state = {
+      Text: null
+    }
+  }
+  loadComponent() {
+    import('./text').then((Text) => {
+      this.setState({
+        Text: Text.default
+      })
+    })
+  }
   render() {
-    const text = b()
+    const { Text } = this.state
     return (<div className="search-text">
-      搜索文字的内容{text}<img src={logo} />
+      {
+        Text ? <Text /> : null
+      }
+      搜索文字的内容<img src={logo} onClick={this.loadComponent.bind(this)}/>
     </div>)
   }
 }

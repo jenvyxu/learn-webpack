@@ -135,12 +135,12 @@ module.exports = {
     splitChunks: {
       minSize: 0,
       cacheGroups: {
-        commons: {
-          test: /common/,
-          name: 'common',
-          chunks: 'all',
-          minChunks: 1
-        },
+        // 不加test条件回把内联的css给分离出来
+        // commons: {
+        //   name: 'common',
+        //   chunks: 'initial',
+        //   minChunks: 1
+        // },
         vendors: {
           test: /(react|react-dom)/,
           name: 'vendor',
