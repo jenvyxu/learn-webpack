@@ -49,6 +49,7 @@ module.exports = {
     path: path.join(__dirname, 'dist')
   },
   mode: 'production',
+  devtool: 'source-map',
   module: {
     rules: [
       {

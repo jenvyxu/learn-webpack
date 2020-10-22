@@ -7,9 +7,10 @@ import './search.less';
 
 class Search extends React.Component {
   render() {
-    return <div className="search-text">
+    a = 1
+    return (<div className="search-text">
       搜索文字的内容<img src={logo} />
-    </div>;
+    </div>);
   }
 }
 
