@@ -7,6 +7,7 @@ const OptimizeCssAssetsWebpackPlugin= require('optimize-css-assets-webpack-plugi
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").default
+const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin')
 
 const setMPA = () => {
   const entry = {}
@@ -49,7 +50,6 @@ module.exports = {
     path: path.join(__dirname, 'dist')
   },
   mode: 'production',
-  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -107,12 +107,27 @@ module.exports = {
       assetNameRegExp: /\.css$/g,
       cssProcessor: require('cssnano')
     }),
-    new CleanWebpackPlugin(),
     new HTMLInlineCSSWebpackPlugin({
       filter(fileName) {
         return fileName.includes('search');
       }
-    }
-    )
+    }),
+    new CleanWebpackPlugin(),
+    new HtmlWebpackExternalsPlugin({
+      externals: [
+        {
+          module: 'react',
+          entry: 'https://now8.gtimg.com/now/lib/16.8.6/react.min.js?_bid=4042',
+          global: 'React'
+        },
+        {
+          module: 'react-dom',
+          entry: 'https://now8.gtimg.com/now/lib/16.8.6/react-dom.min.js?_bid=4042',
+          global: 'ReactDOM'
+        }
+      ],
+      // 防止多页面重复注入相同的script, 可以指定某个文件，默认所有文件都注入
+      files:['search.html']
+    })
   ].concat(htmlWebpackPlugins)
 }
