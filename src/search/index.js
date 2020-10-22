@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react'
 import ReactDOM from 'react-dom'
 import logo from './image/logo.png'
@@ -8,11 +6,12 @@ import '../../common/common'
 
 class Search extends React.Component {
   constructor() {
-    super(...arguments)
+    super()
     this.state = {
       Text: null
     }
   }
+
   loadComponent() {
     import('./text').then((Text) => {
       this.setState({
@@ -20,14 +19,18 @@ class Search extends React.Component {
       })
     })
   }
+
   render() {
     const { Text } = this.state
-    return (<div className="search-text">
-      {
-        Text ? <Text /> : null
-      }
-      搜索文字的内容<img src={logo} onClick={this.loadComponent.bind(this)}/>
-    </div>)
+    return (
+      <div className="search-text">
+        {
+          Text ? <Text /> : null
+        }
+        搜索文字的内容
+        <img src={logo} onClick={this.loadComponent.bind(this)} alt="图片" />
+      </div>
+    )
   }
 }
 
