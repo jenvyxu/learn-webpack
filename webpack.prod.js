@@ -8,6 +8,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").default
 const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin')
+const { SplitChunksPlugin } = require('webpack')
 
 const setMPA = () => {
   const entry = {}
@@ -22,7 +23,7 @@ const setMPA = () => {
         template: path.join(__dirname, `src/${pageName}/index.html`),
         filename:`${pageName}.html`,
         // html加入那些chunk
-        chunks: [pageName],
+        chunks: [pageName, 'vendors', 'common'],
         inject: true,
         minify: {
           html5: true,
@@ -113,21 +114,40 @@ module.exports = {
       }
     }),
     new CleanWebpackPlugin(),
-    new HtmlWebpackExternalsPlugin({
-      externals: [
-        {
-          module: 'react',
-          entry: 'https://now8.gtimg.com/now/lib/16.8.6/react.min.js?_bid=4042',
-          global: 'React'
+    // new HtmlWebpackExternalsPlugin({
+    //   externals: [
+    //     {
+    //       module: 'react',
+    //       entry: 'https://now8.gtimg.com/now/lib/16.8.6/react.min.js',
+    //       global: 'React'
+    //     },
+    //     {
+    //       module: 'react-dom',
+    //       entry: 'https://now8.gtimg.com/now/lib/16.8.6/react-dom.min.js',
+    //       global: 'ReactDOM'
+    //     }
+    //   ],
+    //   // 防止多页面重复注入相同的script, 可以指定某个文件，默认所有文件都注入
+    //   files:['search.html']
+    // })
+  ].concat(htmlWebpackPlugins),
+  optimization: {
+    splitChunks: {
+      minSize: 0,
+      cacheGroups: {
+        commons: {
+          test: /common/,
+          name: 'common',
+          chunks: 'all',
+          minChunks: 1
         },
-        {
-          module: 'react-dom',
-          entry: 'https://now8.gtimg.com/now/lib/16.8.6/react-dom.min.js?_bid=4042',
-          global: 'ReactDOM'
+        vendors: {
+          test: /(react|react-dom)/,
+          name: 'vendor',
+          chunks: 'all',
+          minChunks: 1
         }
-      ],
-      // 防止多页面重复注入相同的script, 可以指定某个文件，默认所有文件都注入
-      files:['search.html']
-    })
-  ].concat(htmlWebpackPlugins)
+      }
+    }
+  }
 }
